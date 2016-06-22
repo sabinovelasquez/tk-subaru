@@ -1,4 +1,4 @@
-var subaru = angular.module('subaru', ['ionic', 'ui.router', 'angularMoment']);
+var subaru = angular.module('subaru', ['ionic', 'ui.router', 'angularMoment', 'ngCordova']);
 
 subaru.config(function($stateProvider, $urlRouterProvider) {
 
@@ -10,25 +10,25 @@ subaru.config(function($stateProvider, $urlRouterProvider) {
     controllerAs: 'main'
   })
   .state('video', {
-    url: '/',
+    url: '/video',
     templateUrl: 'video.html',
     controller: 'VideoCtrl',
     controllerAs: 'video'
   })
   .state('begin', {
-    url: '/',
+    url: '/begin',
     templateUrl: 'begin.html',
     controller: 'BeginCtrl',
     controllerAs: 'begin'
   })
   .state('tryagain', {
-    url: '/',
+    url: '/tryagain',
     templateUrl: 'tryagain.html',
     controller: 'TryagainCtrl',
     controllerAs: 'tryagain'
   })
   .state('sending', {
-    url: '/',
+    url: '/sending',
     templateUrl: 'sending.html',
     controller: 'SendingCtrl',
     controllerAs: 'sending'
@@ -56,14 +56,13 @@ subaru.config(function($stateProvider, $urlRouterProvider) {
 
     this.verifyTime = function() {
       var now = moment();
-      var startTime = moment('3:00am', 'h:mma');
+      var startTime = moment('9:00am', 'h:mma');
       var endTime = moment('5:00pm', 'h:mma');
       var verifyTime = now.isBetween(startTime, endTime);
       if(verifyTime){
         $state.go('sending');
       }else{
         $state.go('tryagain');
-        // $state.go('sending');
       }
     }
 
@@ -77,14 +76,62 @@ subaru.config(function($stateProvider, $urlRouterProvider) {
       $state.go(name);
     };
   })
-  .controller('SendingCtrl', function($state, $http, $interval) {
+  .controller('SendingCtrl', function($state, $http, $interval, $httpParamSerializerJQLike, $cordovaGeolocation) {
     var vm = this;
 
     var time = 14200;
     var duration = moment.duration(time * 1000, 'milliseconds');
     var interval = 1000;
-
+    var currentHost = (window.location.hostname == "localhost") ? "http://localhost/subaru/" : "http://subaru.zetabyte.cl/"
+    var currentLocation = ""
     vm.countdown = '00:00:00';
+
+    var setPosition = function(position) {
+        currentLocation = "Latitude: " + position.coords.latitude + "Longitude: " + position.coords.longitude; 
+    }
+
+    var getLocation = function () {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(setPosition);
+      }
+    }
+
+    var sendMessage = function () {
+        var req = {
+          method: 'POST',
+          url: currentHost + "mail.php",
+          data: {
+            location: currentLocation,
+            phone_id: "A1123123"
+          },
+          transformRequest: function (request) {
+            return request === undefined ? request : $httpParamSerializerJQLike(request);
+          },
+          headers: { 
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
+          }
+        };
+        $http(req).then(function (response) {
+          console.log(response.data)
+        }, function (error) {
+          console.log(error)
+        })
+    }
+
+    var posOptions = {timeout: 10000, enableHighAccuracy: false};
+    $cordovaGeolocation
+      .getCurrentPosition(posOptions)
+      .then(function (position) {
+        currentLocation = "Latitude: " + position.coords.latitude + "Longitude: " + position.coords.longitude; 
+        sendMessage()
+      }, function(err) {
+        sendMessage()
+        console.error(err)
+      });
+
+
+    //getLocation()
+    //sendMessage()
 
     $interval(function(){
       duration = moment.duration(duration.asMilliseconds() - interval, 'milliseconds');
@@ -95,3 +142,4 @@ subaru.config(function($stateProvider, $urlRouterProvider) {
       $state.go(name);
     };
   });
+
