@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title>Subaru</title>
+
+
+    <!-- compiled css output -->
+    <link href="css/ionic.app.css" rel="stylesheet">
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="js/moment.min.js"></script>
+    <script src="js/angular-moment.min.js"></script>
+  
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <!-- your app's js -->
+    <script src="js/subaru.js"></script>
+  </head>
+  <body ng-app="subaru">
+    <ion-nav-view>
+    </ion-nav-view>
+
+    <script id="home.html" type="text/ng-template">
+      <ion-view>
+        <ion-content>
+          <div class="home bg">
+          <div class="col-6">
+            <div class="home-txt"></div>
+          </div><!--.col-6-->
+            <div class="col-6">
+              <a class="play-btn" ng-click="main.changePage('video')">
+              </a>
+            </div><!--.col-6-->
+            
+          </div>
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="video.html" type="text/ng-template">
+      <ion-view cache-view="false">
+        <ion-content>
+          <div class="video bg">
+            <a class="close" ng-click="video.changePage('begin')">
+              <i class="ion-close-round"></i>
+            </a><!--.close-->
+            <video id="intro" preload="metadata" autoplay="autoplay" webkit-playsinline="webkit-playsinline" class="videoPlayer">
+              <source ng-src="{{video.videoIntro}}" type="video/mp4"/>
+            </video>
+          </div><!--.video-->
+        </ion-content>
+      </ion-view>
+    </script>
+    
+    <script id="begin.html" type="text/ng-template">
+      <ion-view>
+        <ion-content>
+          <div class="begin bg">
+            <a class="back" ng-click="begin.back('home')">
+              <i class="ion-arrow-left-c"></i>
+            </a><!--.close-->
+            <a class="begin" ng-click="begin.verifyTime()"></a>
+          </div><!--.begin-->
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="sending.html" type="text/ng-template">
+      <ion-view>
+        <ion-content>
+          <div class="sending bg">
+            <div class="timer">
+              <div class="countdown">{{sending.countdown}}</div>
+            </div><!--.timer-->
+          </div><!--.sending-->
+        </ion-content>
+      </ion-view>
+    </script>
+
+    <script id="tryagain.html" type="text/ng-template">
+      <ion-view>
+        <ion-content>
+          <div class="tryagain bg">
+            <a class="back" ng-click="tryagain.back('begin')">
+              <i class="ion-arrow-left-c"></i>
+            </a><!--.close-->
+            <img class="tryagain" src="img/tryagain.png">
+          </div><!--.tryagain-->
+        </ion-content>
+      </ion-view>
+    </script>
+
+  </body>
+</html>
