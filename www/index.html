@@ -19,6 +19,8 @@
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
+    <script src="js/padzero.js"></script>
+    <script src="js/localstorage.js"></script>
     <script src="js/app.js"></script>
   </head>
   <body ng-app="subaru">
@@ -76,7 +78,7 @@
         <ion-content>
           <div class="sending bg">
             <div class="timer">
-              <div class="countdown">{{sending.countdown}}</div>
+              <div class="countdown">{{sending.countdown.hour | prependZero}}:{{sending.countdown.minute | prependZero}}:{{sending.countdown.second | prependZero}}</div>
             </div><!--.timer-->
           </div><!--.sending-->
         </ion-content>

@@ -1,4 +1,4 @@
-var subaru = angular.module('subaru', ['ionic', 'ui.router', 'angularMoment', 'ngCordova']);
+var subaru = angular.module('subaru', ['ionic', 'ui.router', 'angularMoment', 'ngCordova', 'subaru.localStorage', 'subaru.filters']);
 
 subaru.config(function($stateProvider, $urlRouterProvider) {
 
@@ -76,25 +76,13 @@ subaru.config(function($stateProvider, $urlRouterProvider) {
       $state.go(name);
     };
   })
-  .controller('SendingCtrl', function($state, $http, $interval, $httpParamSerializerJQLike, $cordovaGeolocation) {
+  .controller('SendingCtrl', function($state, $http, $interval, $httpParamSerializerJQLike, $cordovaGeolocation, $localStorage) {
     var vm = this;
-
-    var time = 14200;
-    var duration = moment.duration(time * 1000, 'milliseconds');
-    var interval = 1000;
     var currentHost = (window.location.hostname == "localhost") ? "http://localhost/subaru/" : "http://subaru.zetabyte.cl/"
     var currentLocation = ""
-    vm.countdown = '00:00:00';
-
-    var setPosition = function(position) {
-        currentLocation = "Latitude: " + position.coords.latitude + "Longitude: " + position.coords.longitude; 
-    }
-
-    var getLocation = function () {
-      if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(setPosition);
-      }
-    }
+    var currentCounter = $localStorage.getObject("currentCounter")
+    var emailSent = $localStorage.get("emailSent")
+    vm.countdown = {hour:'00', minute:'00'};
 
     var sendMessage = function () {
         var req = {
@@ -102,7 +90,7 @@ subaru.config(function($stateProvider, $urlRouterProvider) {
           url: currentHost + "mail.php",
           data: {
             location: currentLocation,
-            phone_id: "A1123123"
+            phone_id: "X1"
           },
           transformRequest: function (request) {
             return request === undefined ? request : $httpParamSerializerJQLike(request);
@@ -112,34 +100,48 @@ subaru.config(function($stateProvider, $urlRouterProvider) {
           }
         };
         $http(req).then(function (response) {
-          console.log(response.data)
+          $localStorage.set("emailSent", true)
+          $localStorage.setObject("currentCounter", {startedAt: Date.now(), location: currentLocation, finishAt: moment(Date.now()).add(48, 'hours')})
         }, function (error) {
           console.log(error)
         })
     }
 
-    var posOptions = {timeout: 10000, enableHighAccuracy: false};
-    $cordovaGeolocation
-      .getCurrentPosition(posOptions)
-      .then(function (position) {
-        currentLocation = "Latitude: " + position.coords.latitude + "Longitude: " + position.coords.longitude; 
-        sendMessage()
-      }, function(err) {
-        sendMessage()
-        console.error(err)
-      });
+    var getLocation = function () {
+      var posOptions = {timeout: 10000, enableHighAccuracy: false};
+      $cordovaGeolocation.getCurrentPosition(posOptions).then(
+        function (position) {
+          currentLocation = " http://maps.google.com?q=" + position.coords.latitude + "," + position.coords.longitude; 
+          sendMessage()
+        }, function(err) {
+          console.error(err)
+        }
+      );
+    };
 
+    if (angular.isDefined(currentCounter) && !angular.isEmpty(currentCounter)) {
+      var counter = $interval(function () {
+          vm.countdown.hour = moment(currentCounter.finishAt).diff(Date.now(), 'hours');
+          vm.countdown.minute = moment(currentCounter.finishAt).subtract(vm.countdown.hour, 'hours').diff(Date.now(), 'minutes');
+          vm.countdown.second = moment(currentCounter.finishAt).subtract(vm.countdown.hour, 'hours').subtract(vm.countdown.minute, 'minutes').diff(Date.now(), 'seconds');
 
-    //getLocation()
-    //sendMessage()
+          if (vm.countdown.hour == 0 && vm.countdown.minute == 0 && vm.countdown.second == 0) {
+            $interval.cancel(counter);
+          }
+      }, 1000);
 
-    $interval(function(){
-      duration = moment.duration(duration.asMilliseconds() - interval, 'milliseconds');
-      vm.countdown = moment(duration.asMilliseconds()).format('h:mm:ss');
-    }, interval);
+    } else {
+      if (emailSent !== "true") {
+        getLocation();
+      }
+    }
 
     vm.back = function(name){
       $state.go(name);
     };
   });
 
+
+angular.isEmpty = function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+}
