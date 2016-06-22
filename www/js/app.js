@@ -43,11 +43,22 @@ subaru.config(function($stateProvider, $urlRouterProvider) {
       $state.go(name);
     };
   })
-  .controller('VideoCtrl', function($state) {
+  .controller('VideoCtrl', function($state, $timeout) {
     var vm = this;
+    var video = document.getElementById('intro');
+    vm.showPlayButton = true;
     vm.videoIntro = 'video/intro.mp4';
+    // video.addEventListener('click',function(){
+    //   video.play();
+    // },false);
+
+    vm.play = function() {
+      video.play()
+      vm.showPlayButton = false;
+    }
+
     vm.changePage = function(name){
-      document.getElementById('intro').pause();
+      video.pause();
       $state.go(name);
     };
   })
@@ -57,7 +68,7 @@ subaru.config(function($stateProvider, $urlRouterProvider) {
     this.verifyTime = function() {
       var now = moment();
       var startTime = moment('9:00am', 'h:mma');
-      var endTime = moment('5:00pm', 'h:mma');
+      var endTime = moment('9:00pm', 'h:mma');
       var verifyTime = now.isBetween(startTime, endTime);
       if(verifyTime){
         $state.go('sending');
@@ -114,7 +125,10 @@ subaru.config(function($stateProvider, $urlRouterProvider) {
           currentLocation = " http://maps.google.com?q=" + position.coords.latitude + "," + position.coords.longitude; 
           sendMessage()
         }, function(err) {
-          console.error(err)
+          sendMessage()
+          vm.geoError = true;
+          vm.geoDesc = err;
+          console.error()
         }
       );
     };

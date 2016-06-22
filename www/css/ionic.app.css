@@ -9852,6 +9852,19 @@ a.button {
 .video #intro {
   width: 100%; }
 
+.video a.play {
+  position: absolute;
+  z-index: 99;
+  background: blue;
+  top: 30%;
+  left: 40%;
+  height: 100px;
+  width: 100PX;
+  border-radius: 100%;
+  padding: 4% 6%;
+  color: white;
+  font-size: 61px; }
+
 .video a.close {
   line-height: 40px;
   line-height: 38px;

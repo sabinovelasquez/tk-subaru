@@ -52,10 +52,14 @@
             <a class="close" ng-click="video.changePage('begin')">
               <i class="ion-close-round"></i>
             </a><!--.close-->
-            <video id="intro" preload="metadata" autoplay="autoplay" webkit-playsinline="webkit-playsinline" class="videoPlayer">
+            <video id="intro" webkit-playsinline="webkit-playsinline" class="videoPlayer">
               <source ng-src="{{video.videoIntro}}" type="video/mp4"/>
             </video>
+            <a class="play" ng-click="video.play()" ng-show="video.showPlayButton">
+              <i class="ion-play"></i>
+            </a><!--.play-->
           </div><!--.video-->
+
         </ion-content>
       </ion-view>
     </script>
@@ -81,6 +85,7 @@
               <div class="countdown">{{sending.countdown.hour | prependZero}}:{{sending.countdown.minute | prependZero}}:{{sending.countdown.second | prependZero}}</div>
             </div><!--.timer-->
           </div><!--.sending-->
+          <p ng-if="sending.geoError">geoError: {{geoDesc | json}}</p>
         </ion-content>
       </ion-view>
     </script>
