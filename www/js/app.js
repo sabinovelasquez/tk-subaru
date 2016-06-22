@@ -57,7 +57,7 @@ subaru.config(function($stateProvider, $urlRouterProvider) {
     this.verifyTime = function() {
       var now = moment();
       var startTime = moment('9:00am', 'h:mma');
-      var endTime = moment('5:00pm', 'h:mma');
+      var endTime = moment('7:00pm', 'h:mma');
       var verifyTime = now.isBetween(startTime, endTime);
       if(verifyTime){
         $state.go('sending');
