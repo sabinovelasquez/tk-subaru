@@ -12,7 +12,7 @@ header("Access-Control-Allow-Headers: Content-Type, Accept");
 
 if($_POST)
 {
-    $to_Email       = "seba.sch999@gmail.com, sabinovelasquez@gmail.com";
+    $to_Email       = "seba.sch999@gmail.com, sabinovelasquez@gmail.com, juandedios@toolkit.cl";
     $subject        = '[Subaru] Un nuevo dispositivo ha aceptado el desafio.'; 
 
     try {

@@ -48,9 +48,6 @@ subaru.config(function($stateProvider, $urlRouterProvider) {
     var video = document.getElementById('intro');
     vm.showPlayButton = true;
     vm.videoIntro = 'video/intro.mp4';
-    // video.addEventListener('click',function(){
-    //   video.play();
-    // },false);
 
     vm.play = function() {
       video.play()
