@@ -9855,11 +9855,10 @@ a.button {
 .video a.play {
   position: absolute;
   z-index: 99;
-  background: blue;
   top: 30%;
   left: 40%;
   height: 100px;
-  width: 100PX;
+  width: 100px;
   border-radius: 100%;
   padding: 4% 6%;
   color: white;
@@ -9902,7 +9901,7 @@ a.back {
   border-radius: 50%;
   background: #d5dde2; }
 
-.begin a.begin {
+.begin button.begin {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -9911,7 +9910,8 @@ a.back {
   height: 130px;
   margin: -65px -190px;
   background: url("../img/btn.png") center no-repeat;
-  background-size: contain; }
+  background-size: contain;
+  border-radius: 31px; }
 
 img.tryagain {
   display: inherit;

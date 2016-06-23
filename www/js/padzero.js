@@ -9,12 +9,11 @@
           var cad = input.toString();
           
           if (cad.length == 1) {
-            cad = '0'+cad;
+            cad = '0' + cad;
           }
-          return cad; 
-        } else {
-          return "00";
+          console.log(cad)
         }
+        return input ? cad :  "00";
       };
     });
 

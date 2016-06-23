@@ -35,6 +35,6 @@
 
   angular
     .module('subaru.localStorage', [])
-    .service('$localStorage', StorageService);
+    .service('$localStorage', ["$q", "$window",StorageService]);
 
 }).call(this);
