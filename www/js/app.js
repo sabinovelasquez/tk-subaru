@@ -95,7 +95,7 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
       $state.go(name);
     };
   }])
-  .controller('SendingCtrl',[ "$state", "$http", "$interval", "$httpParamSerializerJQLike", "$cordovaGeolocation", "$localStorage", "$ionicLoading", function($state, $http, $interval, $httpParamSerializerJQLike, $cordovaGeolocation, $localStorage, $ionicLoading) {
+  .controller('SendingCtrl',[ "$state", "$http", "$interval", "$httpParamSerializerJQLike", "$cordovaGeolocation", "$localStorage", "$ionicLoading", "$timeout", function($state, $http, $interval, $httpParamSerializerJQLike, $cordovaGeolocation, $localStorage, $ionicLoading, $timeout) {
     console.log("SendingCtrl initis")
     var vm = this;
     var currentHost = (window.location.hostname == "localhost") ? "http://localhost/subaru/" : "http://subaru.zetabyte.cl/"
@@ -103,18 +103,20 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
     var currentCounter = $localStorage.getObject("currentCounter")
     var emailSent = $localStorage.get("emailSent")
     vm.countdown = {hour:'00', minute:'00', second: '00'};
+    vm.loading = false;
     console.log(currentHost)
 
-    var initCounter = function (){
+    var initCounter = function (counter){
       console.log("initCounter")
-      console.log(JSON.stringify(currentCounter, null, 4));
-      var counter = $interval(function () {
-          vm.countdown.hour = moment(currentCounter.finishAt).diff(Date.now(), 'hours');
-          vm.countdown.minute = moment(currentCounter.finishAt).subtract(vm.countdown.hour, 'hours').diff(Date.now(), 'minutes');
-          vm.countdown.second = moment(currentCounter.finishAt).subtract(vm.countdown.hour, 'hours').subtract(vm.countdown.minute, 'minutes').diff(Date.now(), 'seconds');
+      var counter = counter || currentCounter;
+      console.log(JSON.stringify(counter, null, 4));
+      var counterInterval = $interval(function () {
+          vm.countdown.hour = moment(counter.finishAt).diff(Date.now(), 'hours');
+          vm.countdown.minute = moment(counter.finishAt).subtract(vm.countdown.hour, 'hours').diff(Date.now(), 'minutes');
+          vm.countdown.second = moment(counter.finishAt).subtract(vm.countdown.hour, 'hours').subtract(vm.countdown.minute, 'minutes').diff(Date.now(), 'seconds');
           // console.log(JSON.stringify(vm.countdown, null, 4));
           if (vm.countdown.hour == 0 && vm.countdown.minute == 0 && vm.countdown.second == 0) {
-            $interval.cancel(counter);
+            $interval.cancel(counterInterval);
           }
       }, 1000);
     }
@@ -137,9 +139,13 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
         $http(req).then(function (response) {
           console.log("message ok")
           $localStorage.set("emailSent", true)
-          $localStorage.setObject("currentCounter", {startedAt: Date.now(), location: currentLocation, finishAt: moment(Date.now()).add(48, 'hours')})
-          initCounter()
-          $ionicLoading.hide()
+          var currentCount = {startedAt: Date.now(), location: currentLocation, finishAt: moment(Date.now()).add(48, 'hours')};
+          $localStorage.setObject("currentCounter", currentCount)
+          initCounter(currentCount)
+          $timeout(function() {
+            $ionicLoading.hide()
+            vm.loading = false;
+          }, 1500);
         }, function (error) {
           console.log(error)
           console.log("message error")
@@ -149,6 +155,7 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
 
     var getLocation = function () {
       $ionicLoading.show({template: 'Enviando Informacion...'});
+      vm.loading = true;
       var posOptions = {timeout: 10000, enableHighAccuracy: false};
       $cordovaGeolocation.getCurrentPosition(posOptions).then(
         function (position) {

@@ -1,6 +1,6 @@
 {
   "name": "subaru",
-  "app_id": "",
+  "app_id": "554455b3",
   "gulpStartupTasks": [
     "sass",
     "watch"

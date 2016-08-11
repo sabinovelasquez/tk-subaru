@@ -11,7 +11,6 @@
           if (cad.length == 1) {
             cad = '0' + cad;
           }
-          console.log(cad)
         }
         return input ? cad :  "00";
       };
