@@ -144,11 +144,21 @@ img.tryagain{
     background-position-x: 60px;
   }
   .countdown{
+    display: block;
+    opacity: 1;
     font-size: 60px;
     position: absolute;
     top: 50%;
+    // transform: translateZ(0); 
+    z-index: 1;
     width: 75%;
     margin-left: 25%;
     letter-spacing: 10px;
   }
+}
+
+.thank-you{
+  position: relative;
+  text-align: center;
+  margin: 25%;
 }

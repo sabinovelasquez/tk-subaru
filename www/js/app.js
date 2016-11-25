@@ -37,6 +37,7 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
   })
   .state('sending', {
     url: '/sending',
+    cache: false,
     templateUrl: 'sending.html',
     controller: 'SendingCtrl',
     controllerAs: 'sn'
@@ -96,28 +97,65 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
     };
   }])
   .controller('SendingCtrl',[ "$state", "$http", "$interval", "$httpParamSerializerJQLike", "$cordovaGeolocation", "$localStorage", "$ionicLoading", "$timeout", function($state, $http, $interval, $httpParamSerializerJQLike, $cordovaGeolocation, $localStorage, $ionicLoading, $timeout) {
-    console.log("SendingCtrl initis")
+    console.log("SendingCtrl inits")
     var vm = this;
     var currentHost = (window.location.hostname == "localhost") ? "http://localhost/subaru/" : "http://subaru.zetabyte.cl/"
     var currentLocation = ""
     var currentCounter = $localStorage.getObject("currentCounter")
     var emailSent = $localStorage.get("emailSent")
+    var counterFinished = $localStorage.get("counterFinished")
     vm.countdown = {hour:'00', minute:'00', second: '00'};
-    vm.loading = false;
-    console.log(currentHost)
+    vm.loading = true;
+    vm.finished = false;  
+
+    if (counterFinished == "true") {
+      vm.finished = true;  
+    };
+
+    vm.reset = function (){
+      $localStorage.clearAll()
+      $state.go('home');
+    }
+    var redraw = false;
+
+    var forceRedraw = function(element){
+      //console.log(element)
+      $timeout(function() {
+        if (redraw) {
+          console.log("none")
+          element.style.transform = "none";    
+        } else {
+          console.log("trans")
+          element.style.transform = "translateZ(0)";    
+        }
+        redraw = !redraw;
+      }, 1000);
+      
+      // var disp = element.style.display;
+      // element.style.display = 'none';
+      // var trick = element.offsetHeight;
+      // element.style.display = disp;
+    };
+    
 
     var initCounter = function (counter){
       console.log("initCounter")
       var counter = counter || currentCounter;
       console.log(JSON.stringify(counter, null, 4));
+      vm.loading = false;
       var counterInterval = $interval(function () {
-          vm.countdown.hour = moment(counter.finishAt).diff(Date.now(), 'hours');
-          vm.countdown.minute = moment(counter.finishAt).subtract(vm.countdown.hour, 'hours').diff(Date.now(), 'minutes');
-          vm.countdown.second = moment(counter.finishAt).subtract(vm.countdown.hour, 'hours').subtract(vm.countdown.minute, 'minutes').diff(Date.now(), 'seconds');
-          // console.log(JSON.stringify(vm.countdown, null, 4));
-          if (vm.countdown.hour == 0 && vm.countdown.minute == 0 && vm.countdown.second == 0) {
-            $interval.cancel(counterInterval);
-          }
+        //forceRedraw(document.querySelector(".countdown"))
+        vm.countdown.hour = moment(counter.finishAt).diff(Date.now(), 'hours');
+        vm.countdown.minute = moment(counter.finishAt).subtract(vm.countdown.hour, 'hours').diff(Date.now(), 'minutes');
+        vm.countdown.second = moment(counter.finishAt).subtract(vm.countdown.hour, 'hours').subtract(vm.countdown.minute, 'minutes').diff(Date.now(), 'seconds');
+        // console.log(JSON.stringify(vm.countdown, null, 4));
+        if (vm.countdown.hour <= 0 && vm.countdown.minute <= 0 && vm.countdown.second <= 0) {
+          $interval.cancel(counterInterval);
+          vm.countdown = {hour:'00', minute:'00', second: '00'};
+          $localStorage.setObject("currentCounter", {})
+          $localStorage.set("counterFinished", true)
+          vm.finished = true;
+        }
       }, 1000);
     }
 
@@ -145,17 +183,20 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
           $timeout(function() {
             $ionicLoading.hide()
             vm.loading = false;
-          }, 1500);
+          }, 500);
         }, function (error) {
           console.log(error)
           console.log("message error")
-          $ionicLoading.hide()
+          $ionicLoading.show({template: 'No se pudo enviar la ubicación'});
+          $timeout(function() {
+            $ionicLoading.hide()  
+          }, 3000);
+          
         })
     }
 
     var getLocation = function () {
       $ionicLoading.show({template: 'Enviando Informacion...'});
-      vm.loading = true;
       var posOptions = {timeout: 10000, enableHighAccuracy: false};
       $cordovaGeolocation.getCurrentPosition(posOptions).then(
         function (position) {

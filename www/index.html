@@ -81,10 +81,13 @@
       <ion-view>
         <ion-content>
           <div class="sending bg">
-            <div class="timer">
-              <div class="countdown" ng-hide="loading">
+            <div class="timer" ng-hide="sn.loading || sn.finished">
+              <p class="countdown" >
               {{sn.countdown.hour | prependZero}}:{{sn.countdown.minute | prependZero}}:{{sn.countdown.second | prependZero}}
-              </div>
+              </p>
+              <div class="thank-you" ng-show="sn.finished">
+                <h3 on-double-tap="sn.reset()">Gracias por participar en la Experiencia Subaru!</h3>
+              </div 
             </div><!--.timer-->
           </div><!--.sending-->
         </ion-content>
