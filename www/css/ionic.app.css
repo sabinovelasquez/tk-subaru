@@ -9835,7 +9835,7 @@ a.button {
     left: 50%;
     width: 210px;
     height: 190px;
-    margin: -105px;
+    margin: -95px;
     background: url("../img/home-txt.png") center no-repeat;
     background-size: contain; }
   .home a.play-btn {
@@ -9909,6 +9909,7 @@ a.back {
   width: 380px;
   height: 130px;
   margin: -65px -190px;
+  border: none;
   background: url("../img/btn.png") center no-repeat;
   background-size: contain;
   border-radius: 31px; }
