@@ -52,7 +52,7 @@
             <a class="close" ng-click="video.changePage('begin')">
               <i class="ion-close-round"></i>
             </a><!--.close-->
-            <video id="intro" webkit-playsinline="webkit-playsinline" class="videoPlayer">
+            <video id="intro" webkit-playsinline="webkit-playsinline" class="videoPlayer" autoplay>
               <source ng-src="{{video.videoIntro}}" type="video/mp4"/>
             </video>
             <a class="play" ng-click="video.play()" ng-show="video.showPlayButton">

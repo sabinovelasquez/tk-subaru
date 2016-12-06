@@ -56,7 +56,7 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
     console.log("VideoCtrl initis")
     var vm = this;
     var video = document.getElementById('intro');
-    vm.showPlayButton = true;
+    vm.showPlayButton = false;
     vm.videoIntro = 'video/intro.mp4';
 
     vm.play = function() {
