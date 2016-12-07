@@ -11,12 +11,12 @@ subaru.run(["$ionicPlatform", function($ionicPlatform) {
 subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
 
   $stateProvider
-  .state('home', {
-    url: '/',
-    templateUrl: 'home.html',
-    controller: 'PageCtrl',
-    controllerAs: 'main'
-  })
+  // .state('home', {
+  //   url: '/',
+  //   templateUrl: 'home.html',
+  //   controller: 'PageCtrl',
+  //   controllerAs: 'main'
+  // })
   .state('video', {
     url: '/video',
     templateUrl: 'video.html',
@@ -43,7 +43,7 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
     controllerAs: 'sn'
   })
 
-  $urlRouterProvider.otherwise("/");
+  $urlRouterProvider.otherwise("/video");
 
 }])
   .controller('PageCtrl',[ "$state", function($state) {
@@ -56,7 +56,7 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
     console.log("VideoCtrl initis")
     var vm = this;
     var video = document.getElementById('intro');
-    vm.showPlayButton = false;
+    vm.showPlayButton = true;
     vm.videoIntro = 'video/intro.mp4';
 
     vm.play = function() {
@@ -68,6 +68,11 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
       video.pause();
       $state.go(name);
     };
+
+    video.addEventListener('ended', function(e) {
+      $state.go('begin');
+    }, false);
+
   }])
   .controller('BeginCtrl',[ "$state",  function($state) {
     var vm = this;
@@ -77,9 +82,10 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
       console.log("verifyTime")
       var now = moment(Date.now());
       var startTime = moment('9:00am', 'h:mma');
-      var endTime = moment('9:00pm', 'h:mma');
+      var endTime = moment('09:00pm', 'h:mma');
       var verifyTime = now.isBetween(startTime, endTime);
-      if(verifyTime == true) {
+      //if(verifyTime == true) {
+      if(true) {
         $state.go('sending');
       } else {
         $state.go('tryagain');
@@ -87,7 +93,7 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
     }
 
     vm.back = function(name){
-      $state.go(name);
+      $state.go('video');
     };
   }])
   .controller('TryagainCtrl', [ "$state", function($state) {

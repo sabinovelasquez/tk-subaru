@@ -9936,6 +9936,7 @@ img.tryagain {
   font-size: 60px;
   position: absolute;
   top: 50%;
+  color: #fff;
   z-index: 1;
   width: 75%;
   margin-left: 25%;

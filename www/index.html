@@ -48,16 +48,24 @@
     <script id="video.html" type="text/ng-template">
       <ion-view cache-view="false">
         <ion-content>
+          <div class="home bg" ng-show="video.showPlayButton">
+            <div class="row">
+              <div class="col-6">
+                <div class="home-txt"></div>
+              </div><!--.col-6-->
+              <div class="col-6">
+                <a class="play-btn" ng-click="video.play()">
+                </a>
+              </div><!--.col-6-->
+            </div>  
+          </div>
           <div class="video bg">
-            <a class="close" ng-click="video.changePage('begin')">
+            <a class="close" ng-click="video.changePage('begin')" ng-hide="video.showPlayButton">
               <i class="ion-close-round"></i>
             </a><!--.close-->
-            <video id="intro" webkit-playsinline="webkit-playsinline" class="videoPlayer" autoplay>
+            <video id="intro" webkit-playsinline="webkit-playsinline" class="videoPlayer">
               <source ng-src="{{video.videoIntro}}" type="video/mp4"/>
             </video>
-            <a class="play" ng-click="video.play()" ng-show="video.showPlayButton">
-              <i class="ion-play"></i>
-            </a><!--.play-->
           </div><!--.video-->
 
         </ion-content>
