@@ -9946,3 +9946,10 @@ img.tryagain {
   position: relative;
   text-align: center;
   margin: 25%; }
+
+.phone-id {
+  position: absolute;
+  top: 1px;
+  color: #000;
+  font-size: 13px;
+  right: 3px; }

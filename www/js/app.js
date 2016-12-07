@@ -1,12 +1,28 @@
 var subaru = angular.module('subaru', ['ionic', 'ui.router', 'angularMoment', 'ngCordova', 'subaru.localStorage', 'subaru.filters']);
 
-subaru.run(["$ionicPlatform", function($ionicPlatform) {
+subaru.run(["$ionicPlatform","$localStorage", function($ionicPlatform, $localStorage) {
     $ionicPlatform.ready(function() {
         if (window.StatusBar) {
             StatusBar.hide();
         }
     });
-}])
+
+    var makeid = function () {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 5; i++ )
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
+    };
+    var phoneId = $localStorage.get('phoneId', false);
+    if (!phoneId) {
+      phoneId = makeid();
+      $localStorage.set('phoneId', phoneId);
+    }
+
+}]);
 
 subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, $urlRouterProvider) {
 
@@ -18,7 +34,7 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
   //   controllerAs: 'main'
   // })
   .state('video', {
-    url: '/video',
+    url: '/',
     templateUrl: 'video.html',
     controller: 'VideoCtrl',
     controllerAs: 'video'
@@ -43,16 +59,16 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
     controllerAs: 'sn'
   })
 
-  $urlRouterProvider.otherwise("/video");
+  $urlRouterProvider.otherwise("/");
 
 }])
-  .controller('PageCtrl',[ "$state", function($state) {
-    var vm = this;
-    vm.changePage = function(name){
-      $state.go(name);
-    };
-  }])
-  .controller('VideoCtrl',["$state", "$timeout", function($state, $timeout) {
+  // .controller('PageCtrl',[ "$state", function($state) {
+  //   var vm = this;
+  //   vm.changePage = function(name){
+  //     $state.go(name);
+  //   };
+  // }])
+  .controller('VideoCtrl',["$state", "$timeout", "$localStorage", function($state, $timeout, $localStorage) {
     console.log("VideoCtrl initis")
     var vm = this;
     var video = document.getElementById('intro');
@@ -72,6 +88,11 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
     video.addEventListener('ended', function(e) {
       $state.go('begin');
     }, false);
+
+    $timeout(function() {
+      var phoneId = $localStorage.get('phoneId', false);
+      vm.phoneId = phoneId;
+    }, 500);
 
   }])
   .controller('BeginCtrl',[ "$state",  function($state) {
@@ -120,7 +141,7 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
 
     vm.reset = function (){
       $localStorage.clearAll()
-      $state.go('home');
+      $state.go('video');
     }
     var redraw = false;
 
@@ -166,12 +187,13 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
     }
 
     var sendMessage = function () {
+        var phoneId = $localStorage.get('phoneId', false);
         var req = {
           method: 'POST',
           url: currentHost + "mail.php",
           data: {
             location: currentLocation,
-            phone_id: "X3"
+            phone_id: phoneId || "X1SD"
           },
           transformRequest: function (request) {
             return request === undefined ? request : $httpParamSerializerJQLike(request);
