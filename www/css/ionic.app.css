@@ -9815,6 +9815,9 @@ a.button {
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
 
+.overflow-scroll {
+  overflow: hidden !important; }
+
 .col-6 {
   float: left;
   width: 50%;
@@ -9926,16 +9929,14 @@ img.tryagain {
   width: 100%;
   height: 100%;
   background: url("../img/timer.png") center no-repeat;
-  background-size: contain;
-  background-position-y: -20px;
-  background-position-x: 60px; }
+  background-size: contain; }
 
 .sending .countdown {
   display: block;
   opacity: 1;
   font-size: 60px;
   position: absolute;
-  top: 50%;
+  top: 48%;
   color: #fff;
   z-index: 1;
   width: 75%;

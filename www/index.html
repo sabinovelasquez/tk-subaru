@@ -13,8 +13,7 @@
     <script src="lib/ionic/js/ionic.bundle.js"></script>
     <script src="js/moment.min.js"></script>
     <script src="js/angular-moment.min.js"></script>
-    <script src="lib/ngCordova/dist/ng-cordova.js"></script> 
-  
+    <script src="lib/ngCordova/dist/ng-cordova.js"></script>
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
@@ -30,7 +29,7 @@
     <!--
     <script id="home.html" type="text/ng-template">
       <ion-view>
-        <ion-content>
+        <ion-content scroll="false">
           <div class="home bg">
             <div class="row">
               <div class="col-6">
@@ -48,18 +47,18 @@
 
     <script id="video.html" type="text/ng-template">
       <ion-view cache-view="false">
-        <ion-content>
+        <ion-content scroll="false">
           <div class="home bg" ng-show="video.showPlayButton">
             <div class="row">
               <div class="col-6">
-                <div class="home-txt"></div>
+                <div class="home-txt" on-double-tap="showPhoneId = true"></div>
               </div><!--.col-6-->
               <div class="col-6">
                 <a class="play-btn" ng-click="video.play()">
                 </a>
               </div><!--.col-6-->
-              <p class="phone-id"> {{video.phoneId}}</p>
-            </div>  
+              <p class="phone-id" ng-show="showPhoneId"> {{video.phoneId}}</p>
+            </div>
           </div>
           <div class="video bg">
             <a class="close" ng-click="video.changePage('begin')" ng-hide="video.showPlayButton">
@@ -73,10 +72,10 @@
         </ion-content>
       </ion-view>
     </script>
-    
+
     <script id="begin.html" type="text/ng-template">
       <ion-view>
-        <ion-content>
+        <ion-content scroll="false">
           <div class="begin bg">
             <a class="back" ng-click="begin.back('home')">
               <i class="ion-arrow-left-c"></i>
@@ -89,7 +88,7 @@
 
     <script id="sending.html" type="text/ng-template">
       <ion-view>
-        <ion-content>
+        <ion-content scroll="false">
           <div class="sending bg">
             <div class="timer" ng-hide="sn.loading || sn.finished">
               <p class="countdown" >
@@ -106,7 +105,7 @@
 
     <script id="tryagain.html" type="text/ng-template">
       <ion-view>
-        <ion-content>
+        <ion-content scroll="false">
           <div class="tryagain bg">
             <a class="back" ng-click="tryagain.back('begin')">
               <i class="ion-arrow-left-c"></i>

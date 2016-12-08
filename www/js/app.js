@@ -76,7 +76,7 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
     vm.videoIntro = 'video/intro.mp4';
 
     vm.play = function() {
-      video.play()
+      video.play();
       vm.showPlayButton = false;
     }
 
@@ -126,17 +126,17 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
   .controller('SendingCtrl',[ "$state", "$http", "$interval", "$httpParamSerializerJQLike", "$cordovaGeolocation", "$localStorage", "$ionicLoading", "$timeout", function($state, $http, $interval, $httpParamSerializerJQLike, $cordovaGeolocation, $localStorage, $ionicLoading, $timeout) {
     console.log("SendingCtrl inits")
     var vm = this;
-    var currentHost = (window.location.hostname == "localhost") ? "http://localhost/subaru/" : "http://subaru.zetabyte.cl/"
+    var currentHost = (window.location.hostname == "localhost") ? "http://subaru.zetabyte.cl/" : "http://subaru.zetabyte.cl/"
     var currentLocation = ""
     var currentCounter = $localStorage.getObject("currentCounter")
     var emailSent = $localStorage.get("emailSent")
     var counterFinished = $localStorage.get("counterFinished")
     vm.countdown = {hour:'00', minute:'00', second: '00'};
     vm.loading = true;
-    vm.finished = false;  
+    vm.finished = false;
 
     if (counterFinished == "true") {
-      vm.finished = true;  
+      vm.finished = true;
     };
 
     vm.reset = function (){
@@ -150,20 +150,18 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
       $timeout(function() {
         if (redraw) {
           console.log("none")
-          element.style.transform = "none";    
+          element.style.transform = "none";
         } else {
           console.log("trans")
-          element.style.transform = "translateZ(0)";    
+          element.style.transform = "translateZ(0)";
         }
         redraw = !redraw;
       }, 1000);
-      
       // var disp = element.style.display;
       // element.style.display = 'none';
       // var trick = element.offsetHeight;
       // element.style.display = disp;
     };
-    
 
     var initCounter = function (counter){
       console.log("initCounter")
@@ -198,7 +196,7 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
           transformRequest: function (request) {
             return request === undefined ? request : $httpParamSerializerJQLike(request);
           },
-          headers: { 
+          headers: {
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8;'
           }
         };
@@ -217,9 +215,8 @@ subaru.config(["$stateProvider", "$urlRouterProvider", function($stateProvider, 
           console.log("message error")
           $ionicLoading.show({template: 'No se pudo enviar la ubicación'});
           $timeout(function() {
-            $ionicLoading.hide()  
+            $ionicLoading.hide()
           }, 3000);
-          
         })
     }
 
