@@ -36,7 +36,7 @@ PASS KEYSTORE: subarutk
 `jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore subaru-tk.keystore platforms/android/build/outputs/apk/android-armv7-release-unsigned.apk alias_subaru `
 
 IF there is builded apk remove it
-`rm platforms/android/build/outputs/apk/subarutk-beta-release.apk `
+`rm platforms/android/build/outputs/apk/subarutk-release.apk `
 
 #ZIPALIGN SIGNED APK
 `~/Library/Android/sdk/build-tools/23.0.2/zipalign  -v 4 platforms/android/build/outputs/apk/android-armv7-release-unsigned.apk  platforms/android/build/outputs/apk/subarutk-release.apk  `
