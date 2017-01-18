@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="cl.zetabyte.desafiosubaru" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="cl.zetabyte.desafiosubaru" version="0.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>Desafio Subaru</name>
   <description>
         Desafio Subaru 48 horas,
@@ -9,7 +9,7 @@
     </author>
   <content src="index.html"/>
   <access origin="*"/>
-  <allow-navigation href="*" />
+  <allow-navigation href="*" />g
   <preference name="AllowInlineMediaPlayback" value="true"/>
   <preference name="orientation" value="landscape"/>
   <preference name="Fullscreen" value="true"/>
