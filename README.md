@@ -40,5 +40,5 @@ PASS KEYSTORE: subarutk
 IF there is builded apk remove it
 `rm platforms/android/build/outputs/apk/subarutk-release.apk `
 
-#ZIPALIGN SIGNED APK
+### ZIPALIGN SIGNED APK
 `~/Library/Android/sdk/build-tools/23.0.2/zipalign  -v 4 platforms/android/build/outputs/apk/android-armv7-release-unsigned.apk  platforms/android/build/outputs/apk/subarutk-release.apk  `
