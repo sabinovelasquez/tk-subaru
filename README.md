@@ -10,16 +10,18 @@ Desafio Subaru. Construida con [Ionic Framework](http://ionicframework.com/).
 
 ### Correr
 
--) Instalar dependencias `npm install`
--) Instalar dependencias `bower install`
+- Instalar dependencias `npm install`
+- Instalar dependencias `bower install`
 
 ### En Web
--) Correr localmente en browser `ionic serve`
+
+- Correr localmente en browser `ionic serve`
 
 ### En Emulador
--) Agregar la plataforma `ionic platform add <ios o android>`
--) Construir `ionic build <ios o android>`
--) Deploy en emulador `ionic emulate <ios o android>`
+
+- Agregar la plataforma `ionic platform add <ios o android>`
+- Construir `ionic build <ios o android>`
+- Deploy en emulador `ionic emulate <ios o android>`
 
 Se puede probar en navegador, emulador Android, simulados iOS y en dispositivos iOS registrados o Android. [Más información](http://ionicframework.com/docs/guide/testing.html).
 
